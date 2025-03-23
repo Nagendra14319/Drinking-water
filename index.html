@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Quality Checker</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #6dd5ed, #2193b0);
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        h1,h2, h3 {
+            font-weight: bold;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            margin-top: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .input-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .input-box {
+            width: 48%; /* Adjust width to fit two per row */
+            margin-top: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 20px; /* Makes it rounded */
+            outline: none;
+            font-size: 16px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
+
+        input:focus {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+
+        button {
+            background-color: #ff5733;
+            color: white;
+            font-size: 18px;
+            padding: 12px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #c70039;
+        }
+
+        #result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        /* Navigation Styles */
+        .menu-icon {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            color: white;
+            padding-top: 60px;
+            padding-left: 20px;
+            z-index: 1000;
+        }
+
+        nav.active {
+            transform: translateX(0);
+        }
+
+        .menu-item {
+            padding: 15px;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: #444;
+        }
+
+        /* WHO Standards */
+        .who-standards {
+            margin-top: 20px;
+            text-align: left;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            font-size: 14px;
+        }
+
+        .who-standards p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ☰ Menu Icon -->
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+
+    <!-- Navigation Bar -->
+     <div class="header">
+        <nav id="menu">
+            <div class="menu-item" onclick="toggleMenu()">✖ Close Menu</div>
+            <div class="menu-item" onclick="setActive(this)">Home</div>
+            <div class="menu-item" onclick="setActive(this)">About</div>
+            <div class="menu-item" onclick="setActive(this)">Contact</div>
+        </nav>
+        <h1>Community Service Project</h1>
+     </div>
+    
+
+    <div class="container">
+        <h2>Drinking Water Quality Analysis & Reporting System</h2>
+    
+        <div class="input-container">
+            <div class="input-box">
+                <label><b>pH</b></label>
+                <input id="ph" type="number" placeholder="Enter pH value">
+            </div>
+    
+            <div class="input-box">
+                <label><b>Turbidity (NTU)</b></label>
+                <input id="turbidity" type="number" placeholder="Enter Turbidity">
+            </div>
+    
+            <div class="input-box">
+                <label><b>TDS (mg/L)</b></label>
+                <input id="tds" type="number" placeholder="Enter TDS">
+            </div>
+    
+            <div class="input-box">
+                <label><b>Temperature (°C)</b></label>
+                <input id="temperature" type="number" placeholder="Enter Temperature">
+            </div>
+        </div>
+    
+        <button onclick="checkQuality()">Check Quality</button>
+        <p id="result"></p>
+    </div>
+
+    <div class="who-standards container">
+        <h3>WHO Water Quality Standards</h3>
+        <p>✅ pH: "6.5 - 8.5"</p>
+        <p>✅ Turbidity: "≤ 5 NTU"</p>
+        <p>✅ TDS: "≤ 500 mg/L" (Ideal), "≤ 1000 mg/L" (Acceptable)</p>
+        <p>✅ Temperature: "≤ 25°C" (Ideal), "≤ 30°C" (Acceptable)</p>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById("menu").classList.toggle("active");
+        }
+
+        function setActive(element) {
+            let items = document.querySelectorAll(".menu-item");
+            items.forEach(item => item.classList.remove("active"));
+            element.classList.add("active");
+        }
+
+        function checkQuality() {
+            let pH = parseFloat(document.getElementById("ph").value);
+            let turbidity = parseFloat(document.getElementById("turbidity").value);
+            let tds = parseFloat(document.getElementById("tds").value);
+            let temperature = parseFloat(document.getElementById("temperature").value);
+
+            let resultText = "";
+            let voiceMessage = "";
+
+            if ((pH >= 6.5 && pH <= 8.5) && (turbidity <= 5) && (tds <= 500) && (temperature <= 25)) {
+                resultText = "✅ Water is **Good** for drinking";
+                voiceMessage = "Water quality is good for drinking.";
+            } else if ((pH >= 6 && pH <= 9) && (turbidity <= 10) && (tds <= 1000) && (temperature <= 30)) {
+                resultText = "⚠️ Water is **Acceptable**, may need filtering";
+                voiceMessage = "Water quality is acceptable. It may need filtering.";
+            } else {
+                resultText = "❌ Water is **Not Safe** for drinking";
+                voiceMessage = "Water is not safe for drinking. Please treat or find a better source.";
+            }
+
+            document.getElementById("result").innerHTML = resultText;
+
+            let speech = new SpeechSynthesisUtterance(voiceMessage);
+            speech.lang = "en-US";
+            speech.rate = 1;
+            window.speechSynthesis.speak(speech);
+        }
+    </script>
+
+</body>
+</html>
